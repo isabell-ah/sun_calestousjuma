@@ -7,7 +7,6 @@ ARCH_T 			= linux darwin
 ifeq ($(filter $(ARCH),$(ARCH_T)),)
     $(error Unsupported OS: $(ARCH))
 else
-SHELL 	= /bin/zsh
 server:
 	npm install 
 	npm run dev &
