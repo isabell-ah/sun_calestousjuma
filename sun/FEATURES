@@ -1,0 +1,25 @@
+-> switch between fonts - low.
+-> XP math, & how it can be awarded from either 1. Taking lessons or Solving problems.
+-> syntax highlight wasm, for now just /bin/env python3 & also /bin/cc for me to solve & rewview the problems
+++ or just a c build script that creates an image where python -c "blob response"
+
+| Ticket ID | Feature         | Description                                      | Priority | Status |
+| --------- | --------------- | ------------------------------------------------ | -------- | ------ |
+| FE-001    | Project setup   | Initialize React (Vite), TailwindCSS, routing    | High     | DONE   |
+| FE-002    | UI scaffolding  | Layout: left nav, main editor, right notes panel | High     | DONE   |
+| FE-003    | Code editor     | Integrate Monaco editor with syntax highlighting | High     | Todo   |
+| FE-004    | Notes panel     | Scrollable notes & hints (Markdown render)       | Medium   | Todo   |
+| FE-005    | Leaderboard UI  | Real-time updates via WebSocket mock             | High     | Todo   |
+| FE-006    | Profile panel   | Show XP, streaks, badges                         | Medium   | DONE   |
+| FE-007    | Local storage   | Persist progress in localStorage                 | High     | Todo   |
+| FE-008    | Auth (frontend) | Login/Signup UI with JWT                         | High     | Todo   |
+| FE-009    | Theme toggle    | Dark/Light mode with persistence                 | Low      | DONE   |
+| BE-001    | Go API setup    | Basic REST API, sqlite                           | High     | DONE   |
+| BE-002    | Auth API        | JWT-based authentication endpoints               | High     | Todo   |
+| BE-003    | Challenge API   | CRUD for challenges/questions                    | High     | Todo   |
+| BE-004    | Submission API  | Evaluate code & return results                   | High     | Todo   |
+| BE-005    | Leaderboard API | WebSocket for real-time rankings                 | High     | Todo   |
+| BE-006    | Offline sync    | Merge local progress with server on login        | Medium   | Todo   |
+| UX-001    | Animations      | Smooth transitions for XP gains, streak popups   | Low      | Todo   |
+| UX-002    | Sounds          | Audio cues for correct submissions               | Low      | Todo   |
+| UX-003    | Badges art      | Design and integrate achievement icons           | Low      | Todo   |

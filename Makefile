@@ -1,7 +1,9 @@
 # ^add && sign-off git commit
 
-ARCH             = $(shell uname -s | tr '[:upper:]' '[:lower:]')
-ARCH_T 	= linux darwin 
+ARCH            = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+ARCH_T 			= linux darwin 
+
+
 ifeq ($(filter $(ARCH),$(ARCH_T)),)
     $(error Unsupported OS: $(ARCH))
 else
@@ -10,7 +12,7 @@ server:
 	npm install 
 	npm run dev &
 git:
-	node CJLF
+	npm run format && node cjlf.js
 	git add . && git commit -a -s
 kill:
 	pkill -9 node
