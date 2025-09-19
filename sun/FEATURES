@@ -9,7 +9,7 @@
 | FE-002    | UI scaffolding  | Layout: left nav, main editor, right notes panel | High     | DONE   |
 | FE-003    | Code editor     | Integrate Monaco editor with syntax highlighting | High     | Todo   |
 | FE-004    | Notes panel     | Scrollable notes & hints (Markdown render)       | Medium   | Todo   |
-| FE-005    | Leaderboard UI  | Real-time updates via WebSocket mock             | High     | Todo   |
+| FE-005    | Leaderboard UI  | Real-time updates via WebSocket mock             | High     | DONE   |
 | FE-006    | Profile panel   | Show XP, streaks, badges                         | Medium   | DONE   |
 | FE-007    | Local storage   | Persist progress in localStorage                 | High     | Todo   |
 | FE-008    | Auth (frontend) | Login/Signup UI with JWT                         | High     | Todo   |
