@@ -88,8 +88,18 @@ export const Header = () => {
     const [copied, setCopied] = useState(false);
     const [streakData] = useState(generateStreakData());
     const { toast } = useToast();
+    
+    // Calculate dynamic score based on solved problems and streak
+    const calculateScore = () => {
+        const solvedProblems = 15; // This would come from user state/API
+        const currentStreak = streakData.filter(day => day.worked).length;
+        const baseScore = (solvedProblems * 5) + (currentStreak * 2);
+        return Math.min(Math.round((baseScore / 100) * 100), 100); // Cap at 100%
+    };
+    
+    const [dynamicScore] = useState(calculateScore());
 
-    // TODO  what are we doing man ????
+    // Generate a random server code for multiplayer sessions
     const generateServerCode = () => {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
         setServerCode(code);
@@ -113,7 +123,6 @@ export const Header = () => {
         copyServerCode();
     };
 
-    // TODO toast
     const handleShareCode = () => {
         const code = generateServerCode();
         toast({
@@ -222,8 +231,7 @@ export const Header = () => {
                         <button className="flex items-center gap-2 hover:text-foreground transition-colors">
                             <Target className="h-4 w-4 text-green-500" />
                             <span className="text-sm font-medium">
-                                {/* TODO dynamic SCORE */}
-                                Score: 100%
+                                Score: {dynamicScore}%
                             </span>
                         </button>
                     </div>

@@ -90,6 +90,16 @@ const addToRemoveQueue = (toastId: string) => {
     toastTimeouts.set(toastId, timeout);
 };
 
+const dismissToast = (toastId?: string) => {
+    if (toastId) {
+        addToRemoveQueue(toastId);
+    } else {
+        memoryState.toasts.forEach((toast) => {
+            addToRemoveQueue(toast.id);
+        });
+    }
+};
+
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case "ADD_TOAST":
@@ -109,14 +119,8 @@ export const reducer = (state: State, action: Action): State => {
         case "DISMISS_TOAST": {
             const { toastId } = action;
 
-            // TODO Side effects ! - This could be extracted into a dismissToast() action
-            if (toastId) {
-                addToRemoveQueue(toastId);
-            } else {
-                state.toasts.forEach((toast) => {
-                    addToRemoveQueue(toast.id);
-                });
-            }
+            // Side effects extracted to dismissToast() action
+            dismissToast(toastId);
 
             return {
                 ...state,

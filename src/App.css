@@ -22,8 +22,6 @@
 
 @font-face {
     font-family: "Cascadia Code";
-
-    /* TODO */
     src:
         url("/fonts/CascadiaCode_VTT.ttf") format("truetype"),
         url("/fonts/CascadiaCodeItalic_VTT.ttf") format("truetype");

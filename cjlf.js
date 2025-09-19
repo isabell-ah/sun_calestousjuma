@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.`;
 
-// TODO shell, python & makefile
 const commentStyles = {
     ".c": "block",
     ".css": "block",
@@ -30,6 +29,10 @@ const commentStyles = {
     ".ts": "block",
     ".tsx": "block",
     ".go": "line",
+    ".py": "line",        // Python
+    ".sh": "line",        // Shell scripts  
+    "Makefile": "line",   // Makefile
+    ".mk": "line",        // Makefile variants
 };
 
 const formatLicense = (style) => {
@@ -57,7 +60,7 @@ const cleanExistingLicense = (content) => {
 };
 
 const buffer_xxx = async () => {
-    const pathnames = glob.sync("**/*.{js,jsx,ts,tsx,c,go,css}", {
+    const pathnames = glob.sync("**/*.{js,jsx,ts,tsx,c,go,css,py,sh,mk}", {
         ignore: [
             "**/dist/**",
             "**/node_modules/**",
@@ -65,9 +68,27 @@ const buffer_xxx = async () => {
             "**/__tests__/fixtures/**",
         ],
     });
+    
+    // Add Makefile support (files without extensions)
+    const makefiles = glob.sync("**/Makefile", {
+        ignore: [
+            "**/dist/**",
+            "**/node_modules/**",
+            "**/tests/fixtures/**",
+            "**/__tests__/fixtures/**",
+        ],
+    });
+    
+    pathnames.push(...makefiles);
 
     for (const pathname of pathnames) {
-        const ext = commentStyles.find((e) => pathname.endsWith(e));
+        let ext = Object.keys(commentStyles).find((e) => pathname.endsWith(e));
+        
+        // Handle Makefile special case (no extension)
+        if (!ext && pathname.endsWith('Makefile')) {
+            ext = 'Makefile';
+        }
+        
         if (!ext) continue;
 
         const style = commentStyles[ext];

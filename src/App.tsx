@@ -29,6 +29,7 @@ import { ThemeProvider } from "next-themes";
 import Dashboard from "./pages/Dashboard";
 import CodePlatform from "./pages/CodePlatform";
 import PythonTracks from "./pages/PythonTracks";
+import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,8 +45,7 @@ const App = () => (
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/code" element={<CodePlatform />} />
                         <Route path="/learn" element={<PythonTracks />} />
-
-                        {/* TODO */}
+                        <Route path="/playground" element={<Index />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>

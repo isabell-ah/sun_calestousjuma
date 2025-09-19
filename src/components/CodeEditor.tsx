@@ -20,9 +20,7 @@
  * THE SOFTWARE.
  */
 
-// BIG BIG BIG TODO SYNTAX HIGLIGHTING
-
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Play, RotateCcw, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,46 +30,87 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import Editor from "@monaco-editor/react";
+import { editor } from "monaco-editor";
 
 export const CodeEditor = () => {
-    // TODO based on lang
-    const [code, setCode] = useState(`function twoSum(nums, target) {
+    const [language, setLanguage] = useState("javascript");
+    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    
+    // Monaco language mapping
+    const getMonacoLanguage = (lang: string) => {
+        const languageMap: { [key: string]: string } = {
+            javascript: "javascript",
+            python: "python",
+            java: "java",
+            cpp: "cpp"
+        };
+        return languageMap[lang] || "javascript";
+    };
+    
+    // Language-based code templates
+    const getCodeTemplate = (lang: string) => {
+        const templates = {
+            javascript: `function twoSum(nums, target) {
     // Your solution here
     
-    }`);
+}`,
+            python: `def two_sum(nums, target):
+    # Your solution here
+    pass`,
+            java: `public class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Your solution here
+        
+    }
+}`,
+            cpp: `#include <vector>
+using namespace std;
 
-    // spent so many hours on this bs, damn
-    const handleKeyDown = (e) => {
-        if (e.key === "Tab") {
-            e.preventDefault();
-
-            const { selectionStart, selectionEnd, value } = e.target;
-            /* hardcord spaces  TODO is there a btter way?*/
-            const tab = "    ";
-
-            const newCode =
-                value.substring(0, selectionStart) +
-                tab +
-                value.substring(selectionEnd);
-
-            setCode(newCode);
-
-            setTimeout(() => {
-                e.target.selectionStart = selectionStart + tab.length;
-                e.target.selectionEnd = selectionStart + tab.length;
-            }, 0);
-        }
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // Your solution here
+        
+    }
+};`
+        };
+        return templates[lang] || templates.javascript;
     };
+    
+    const [code, setCode] = useState(getCodeTemplate("javascript"));
 
-    // TODO
-    const [language, setLanguage] = useState("javascript");
+    // Handle Monaco editor mount
+    const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
+        editorRef.current = editor;
+        
+        // Configure editor options
+        editor.updateOptions({
+            fontSize: 14,
+            fontFamily: 'Cascadia Code, Consolas, Monaco, monospace',
+            tabSize: 4,
+            insertSpaces: true,
+            automaticLayout: true,
+        });
+    };
+    
+    // Update code template when language changes
+    const handleLanguageChange = (newLang: string) => {
+        setLanguage(newLang);
+        setCode(getCodeTemplate(newLang));
+    };
+    
+    // Handle reset button
+    const handleReset = () => {
+        setCode(getCodeTemplate(language));
+    };
 
     return (
         <div className="h-full flex flex-col bg-surface">
             {/* Editor Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
                 <div className="flex items-center gap-3">
-                    <Select value={language} onValueChange={setLanguage}>
+                    <Select value={language} onValueChange={handleLanguageChange}>
                         <SelectTrigger className="w-32">
                             <SelectValue />
                         </SelectTrigger>
@@ -87,32 +126,49 @@ export const CodeEditor = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" onClick={handleReset}>
                         <RotateCcw className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="sm">
                         <Settings className="h-4 w-4" />
                     </Button>
-                    <Button className="bg-primary hover:bg-primary-hover text-primary-foreground glow-effect">
+                    <Button 
+                        className="bg-primary hover:bg-primary-hover text-primary-foreground glow-effect"
+                        onClick={() => {
+                            // Future: implement code execution
+                            console.log('Code execution not yet implemented');
+                        }}
+                    >
                         <Play className="h-4 w-4 mr-2" />
-                        {/* TODO */}
                         Run Code
                     </Button>
                 </div>
             </div>
 
             {/* Code Editor */}
-            <div className="flex-1 p-4">
-                <textarea
+            <div className="flex-1">
+                <Editor
+                    height="100%"
+                    language={getMonacoLanguage(language)}
                     value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    onKeyDown={handleKeyDown} // Add the event handler here
-                    className="w-full h-full bg-transparent text-text-primary font-mono text-sm resize-none outline-none"
-                    placeholder="Write your code here..."
-                    spellCheck={false}
+                    onChange={(value) => setCode(value || "")}
+                    onMount={handleEditorDidMount}
+                    theme="vs-dark"
+                    options={{
+                        minimap: { enabled: false },
+                        scrollBeyondLastLine: false,
+                        wordWrap: "on",
+                        lineNumbers: "on",
+                        glyphMargin: false,
+                        folding: false,
+                        lineDecorationsWidth: 10,
+                        lineNumbersMinChars: 3,
+                        renderLineHighlight: "line",
+                        contextmenu: false,
+                    }}
                 />
             </div>
-            {/* TOD0 */}
+            {/* Output Panel */}
             <div className="h-32 border-t border-border bg-surface-elevated">
                 <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">

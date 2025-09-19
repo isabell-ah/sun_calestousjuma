@@ -50,7 +50,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // TODO Simulate API call
+    // Simulates API call with loading state and pagination
     const fetchQuestions = async (page: number) => {
         setLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -68,7 +68,7 @@ const Dashboard = () => {
         fetchQuestions(currentPage);
     }, [currentPage]);
 
-    // TODO Store the selected question in localStorage to pass to /code page
+    // Store the selected question in localStorage to pass to /code page
     const handleQuestionClick = (question: Question) => {
         localStorage.setItem("selectedQuestion", JSON.stringify(question));
         navigate("/code");
