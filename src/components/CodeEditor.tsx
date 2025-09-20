@@ -36,70 +36,50 @@ import { editor } from "monaco-editor";
 export const CodeEditor = () => {
     const [language, setLanguage] = useState("javascript");
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-    
-    // Monaco language mapping
+    // monaco language mapping
     const getMonacoLanguage = (lang: string) => {
         const languageMap: { [key: string]: string } = {
             javascript: "javascript",
             python: "python",
             java: "java",
-            cpp: "cpp"
+            cpp: "cpp",
         };
         return languageMap[lang] || "javascript";
     };
-    
-    // Language-based code templates
-    const getCodeTemplate = (lang: string) => {
-        const templates = {
-            javascript: `function twoSum(nums, target) {
-    // Your solution here
-    
-}`,
-            python: `def two_sum(nums, target):
-    # Your solution here
-    pass`,
-            java: `public class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        // Your solution here
-        
-    }
-}`,
-            cpp: `#include <vector>
-using namespace std;
 
-class Solution {
-public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        // Your solution here
-        
-    }
-};`
+    // Language-based code templates (just a comment for each language)
+    const getCodeTemplate = (lang: string) => {
+        const commentMap: { [key: string]: string } = {
+            javascript: `// Write your code here`,
+            python: "# Write your code here",
+            java: "// Write your code here",
+            cpp: "// Write your code here",
         };
-        return templates[lang] || templates.javascript;
+        return commentMap[lang] || "// Write your code here";
     };
-    
+
     const [code, setCode] = useState(getCodeTemplate("javascript"));
 
     // Handle Monaco editor mount
     const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
         editorRef.current = editor;
-        
+
         // Configure editor options
         editor.updateOptions({
             fontSize: 14,
-            fontFamily: 'Cascadia Code, Consolas, Monaco, monospace',
+            fontFamily: "Cascadia Code, Consolas, Monaco, monospace",
             tabSize: 4,
             insertSpaces: true,
             automaticLayout: true,
         });
     };
-    
+
     // Update code template when language changes
     const handleLanguageChange = (newLang: string) => {
         setLanguage(newLang);
         setCode(getCodeTemplate(newLang));
     };
-    
+
     // Handle reset button
     const handleReset = () => {
         setCode(getCodeTemplate(language));
@@ -110,7 +90,10 @@ public:
             {/* Editor Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
                 <div className="flex items-center gap-3">
-                    <Select value={language} onValueChange={handleLanguageChange}>
+                    <Select
+                        value={language}
+                        onValueChange={handleLanguageChange}
+                    >
                         <SelectTrigger className="w-32">
                             <SelectValue />
                         </SelectTrigger>
@@ -132,11 +115,56 @@ public:
                     <Button variant="ghost" size="sm">
                         <Settings className="h-4 w-4" />
                     </Button>
-                    <Button 
+                    <Button
                         className="bg-primary hover:bg-primary-hover text-primary-foreground glow-effect"
-                        onClick={() => {
-                            // Future: implement code execution
-                            console.log('Code execution not yet implemented');
+                        onClick={async () => {
+                            if (language === "python") {
+                                try {
+                                    // @ts-ignore
+                                    if (!window.pyodide) {
+                                        await new Promise<void>(
+                                            (resolve, reject) => {
+                                                const script =
+                                                    document.createElement(
+                                                        "script"
+                                                    );
+                                                script.src =
+                                                    "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js";
+                                                script.onload = () => resolve();
+                                                script.onerror = () =>
+                                                    reject(
+                                                        new Error(
+                                                            "Failed to load Pyodide"
+                                                        )
+                                                    );
+                                                document.body.appendChild(
+                                                    script
+                                                );
+                                            }
+                                        );
+                                        // @ts-ignore
+                                        window.pyodide = await (
+                                            window as any
+                                        ).loadPyodide();
+                                    }
+
+                                    // @ts-ignore
+                                    const pyodide = window.pyodide;
+
+                                    // Run Python code
+                                    // `code` is whatever the user has written in your editor
+                                    const result =
+                                        await pyodide.runPythonAsync(code);
+
+                                    console.log("Python output:", result);
+                                } catch (err) {
+                                    console.error("Python error:", err);
+                                }
+                            } else {
+                                console.log(
+                                    "Code execution not yet implemented for this language"
+                                );
+                            }
                         }}
                     >
                         <Play className="h-4 w-4 mr-2" />
@@ -168,7 +196,7 @@ public:
                     }}
                 />
             </div>
-            {/* Output Panel */}
+            {/* TODO Output Panel  */}
             <div className="h-32 border-t border-border bg-surface-elevated">
                 <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">
