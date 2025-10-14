@@ -1,0 +1,5 @@
+# Contributing to bestie
+
+Want to contribute to bestie? Add name & email on AUTHORS file in the . dir.
+
+A contribution guide will be written in the future.

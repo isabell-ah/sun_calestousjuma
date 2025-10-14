@@ -1,0 +1,24 @@
+name: Makefile CI
+
+on:
+    push:
+        branches: ["slave"]
+    pull_request:
+        branches: ["slave"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            # suspends npmn
+            - name: Install dependencies
+              run: make
+
+            # - name:  Format code
+            #   run: make format
+
+            - name: kill npm
+              run: make kill
