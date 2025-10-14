@@ -13,7 +13,6 @@ const RATE_LIMIT = new Map(); // Simple rate limiting
 router.post('/', async (req, res) => {
   const { code, language } = req.body;
   const clientIP = req.ip || req.connection.remoteAddress;
-  const startTime = process.hrtime.bigint();
   
   // Rate limiting
   const now = Date.now();
@@ -59,13 +58,10 @@ router.post('/', async (req, res) => {
         exec(`node "${tempFile}"`, { 
           timeout: EXECUTION_TIMEOUT,
           maxBuffer: MAX_OUTPUT_SIZE,
-          env: {} // Empty environment
+          env: {}
         }, (error, stdout, stderr) => {
           // Clean up file
           try { fs.unlinkSync(tempFile); } catch {}
-          
-          const endTime = process.hrtime.bigint();
-          const executionTime = Number(endTime - startTime) / 1000000;
           
           if (error) {
             if (error.code === 'TIMEOUT') {
@@ -77,11 +73,7 @@ router.post('/', async (req, res) => {
           res.json({ 
             output: stdout.substring(0, MAX_OUTPUT_SIZE), 
             stderr: stderr.substring(0, 1000), 
-            exitCode: 0,
-            performance: {
-              executionTime: Math.round(executionTime * 100) / 100,
-              memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100
-            }
+            exitCode: 0 
           });
         });
       } catch (err) {
@@ -101,9 +93,6 @@ router.post('/', async (req, res) => {
         }, (error, stdout, stderr) => {
           try { fs.unlinkSync(tempFile); } catch {}
           
-          const endTime = process.hrtime.bigint();
-          const executionTime = Number(endTime - startTime) / 1000000;
-          
           if (error) {
             if (error.code === 'TIMEOUT') {
               return res.json({ output: '', stderr: 'Execution timeout', exitCode: 1 });
@@ -114,11 +103,7 @@ router.post('/', async (req, res) => {
           res.json({ 
             output: stdout.substring(0, MAX_OUTPUT_SIZE), 
             stderr: stderr.substring(0, 1000), 
-            exitCode: 0,
-            performance: {
-              executionTime: Math.round(executionTime * 100) / 100,
-              memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100
-            }
+            exitCode: 0 
           });
         });
       } catch (err) {

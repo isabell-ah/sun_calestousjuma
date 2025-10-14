@@ -20,22 +20,22 @@
  * THE SOFTWARE.
  */
 
-interface leaderboard {
-    rank: number;
-    name: string;
-    xp: number;
-    streak: number;
-    score: number;
-}
+// interface leaderboard {
+//     rank: number;
+//     name: string;
+//     xp: number;
+//     streak: number;
+//     score: number;
+// }
 
-/* TODO real CALL should sort by XP & limit=5 */
+// /* TODO real CALL should sort by XP & limit=5 */
 
-const MOCK_LEADERBOARD: Array<leaderboard> = [
-    { rank: 1, name: "phedwin", xp: 15420, streak: 28, score: 94 },
-    { rank: 2, name: "sarah", xp: 14230, streak: 21, score: 92 },
-    { rank: 3, name: "mike", xp: 13100, streak: 19, score: 89 },
-    { rank: 4, name: "john", xp: 1250, streak: 7, score: 89 },
-    { rank: 5, name: "emma", xp: 12500, streak: 15, score: 87 },
-];
+// const MOCK_LEADERBOARD: Array<leaderboard> = [
+//     { rank: 1, name: "phedwin", xp: 15420, streak: 28, score: 94 },
+//     { rank: 2, name: "sarah", xp: 14230, streak: 21, score: 92 },
+//     { rank: 3, name: "mike", xp: 13100, streak: 19, score: 89 },
+//     { rank: 4, name: "john", xp: 1250, streak: 7, score: 89 },
+//     { rank: 5, name: "emma", xp: 12500, streak: 15, score: 87 },
+// ];
 
-export default MOCK_LEADERBOARD;
+// export default MOCK_LEADERBOARD;

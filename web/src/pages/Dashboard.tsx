@@ -15,11 +15,9 @@ import {
 } from "@/components/ui/table";
 
 import { useAuth } from "@/hooks/useAuth";
-import { useAppStore } from "@/stores/useAppStore";
 import { api } from "@/lib/api";
 import { PAGINATE } from "@/lib/CONSTATS";
 import { getDifficultyColor } from "@/lib/island";
-import { ErrorMessage } from "@/components/ErrorMessage";
 import FooterComponent from "@/components/Footer";
 
 
@@ -30,7 +28,6 @@ const Dashboard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [showProblems, setShowProblems] = useState(false);
     const [selectedDifficulty, setSelectedDifficulty] = useState('all');
     const navigate = useNavigate();
@@ -39,67 +36,49 @@ const Dashboard = () => {
         ? problems 
         : problems.filter(p => p.difficulty === selectedDifficulty);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setError(null);
-                // Load stats first for faster initial render
-                const statsData = await api.getStats();
-                setStats(statsData);
-                setLoading(false);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         console.log('🔄 Starting data fetch...');
+            
+    //         try {
+    //             // Test basic connectivity first
+    //             const healthResponse = await fetch('http://localhost:3001/api/health');
+    //             if (!healthResponse.ok) {
+    //                 throw new Error('Backend server not responding');
+    //             }
+    //             console.log('✅ Backend server is running');
                 
-                // Load problems in background
-                const problemsData = await api.getProblems({ page: 1, limit: 50 });
-                const sortedProblems = (problemsData.problems || []).sort((a, b) => {
-                    const difficultyOrder = { 'easy': 1, 'medium': 2, 'hard': 3 };
-                    return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-                });
-                setProblems(sortedProblems);
-                setTotalPages(Math.ceil((problemsData.total || sortedProblems.length) / 20));
-            } catch (error) {
-                console.error('Failed to fetch data:', error);
-                setError(error.message || 'Failed to load data');
-                setStats({ totalProblems: 0, totalUsers: 0, totalSubmissions: 0 });
-                setProblems([]);
-                setLoading(false);
-            }
-        };
+    //             // Fetch stats
+    //             console.log('📊 Fetching stats...');
+    //             const statsData = await api.getStats();
+    //             console.log('Stats received:', statsData);
+    //             setStats(statsData);
+                
+    //             // Fetch problems
+    //             console.log('📝 Fetching problems...');
+    //             const problemsResponse = await fetch('http://localhost:3001/api/problems');
+    //             const problemsData = await problemsResponse.json();
+    //             console.log('Problems received:', problemsData);
+                
+    //             if (problemsData.problems) {
+    //                 setProblems(problemsData.problems);
+    //                 console.log(`✅ Loaded ${problemsData.problems.length} problems`);
+    //             } else {
+    //                 console.warn('No problems array in response');
+    //                 setProblems([]);
+    //             }
+                
+    //         } catch (error) {
+    //             console.error('❌ Data fetch failed:', error);
+    //             setStats({ totalProblems: 0, totalUsers: 0, totalSubmissions: 0 });
+    //             setProblems([]);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
         
-        fetchData();
-        
-        // Listen for user updates from submissions
-        const handleUserUpdate = async (event: any) => {
-            if (event.detail) {
-                try {
-                    // Refresh user data from API
-                    const userResponse = await api.getCurrentUser();
-                    if (userResponse.user) {
-                        // Update user in store
-                        const { setUser } = useAppStore.getState();
-                        setUser(userResponse.user);
-                    }
-                    
-                    // Refresh stats
-                    const [statsData, problemsData] = await Promise.all([
-                        api.getStats(),
-                        api.getProblems({ page: 1, limit: 50 })
-                    ]);
-                    setStats(statsData);
-                    const sortedProblems = (problemsData.problems || []).sort((a, b) => {
-                        const difficultyOrder = { 'easy': 1, 'medium': 2, 'hard': 3 };
-                        return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-                    });
-                    setProblems(sortedProblems);
-                    setTotalPages(Math.ceil((problemsData.total || sortedProblems.length) / 20));
-                } catch (error) {
-                    console.error('Failed to refresh data:', error);
-                }
-            }
-        };
-        
-        window.addEventListener('userUpdated', handleUserUpdate);
-        return () => window.removeEventListener('userUpdated', handleUserUpdate);
-    }, []);
+    //     fetchData();
+    // }, []);
 
     const handleProblemClick = (problem: any) => {
         localStorage.setItem("selectedProblem", JSON.stringify(problem));
@@ -117,15 +96,10 @@ const Dashboard = () => {
         try {
             const [statsData, problemsData] = await Promise.all([
                 api.getStats(),
-                api.getProblems({ page: currentPage, limit: 50 })
+                api.getProblems({ page: 1, limit: 100 })
             ]);
             setStats(statsData);
-            const sortedProblems = (problemsData.problems || problemsData || []).sort((a, b) => {
-                const difficultyOrder = { 'easy': 1, 'medium': 2, 'hard': 3 };
-                return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-            });
-            setProblems(sortedProblems);
-            setTotalPages(Math.ceil((problemsData.total || sortedProblems.length) / 20));
+            setProblems(problemsData.problems || problemsData || []);
         } catch (error) {
             console.error('Failed to refresh data:', error);
         } finally {
@@ -139,25 +113,6 @@ const Dashboard = () => {
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
                     <p>Loading dashboard...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="min-h-screen bg-background">
-                <Header />
-                <div className="container py-16 flex items-center justify-center">
-                    <ErrorMessage 
-                        message={error}
-                        type={error.includes('Network') ? 'network' : 'server'}
-                        onRetry={() => {
-                            setLoading(true);
-                            setError(null);
-                            window.location.reload();
-                        }}
-                    />
                 </div>
             </div>
         );
@@ -253,15 +208,15 @@ const Dashboard = () => {
                                         <div className="space-y-3">
                                             <div className="flex items-center justify-between text-sm">
                                                 <span className="text-muted-foreground">Problems Solved</span>
-                                                <span className="font-medium">{user?.problemsSolved || 0}</span>
+                                                <span className="font-medium">0</span>
                                             </div>
                                             <div className="flex items-center justify-between text-sm">
                                                 <span className="text-muted-foreground">Current Streak</span>
-                                                <span className="font-medium">{user?.streak || 0} days</span>
+                                                <span className="font-medium">0 days</span>
                                             </div>
                                             <div className="flex items-center justify-between text-sm">
                                                 <span className="text-muted-foreground">Last Active</span>
-                                                <span className="font-medium">{user?.lastActive || 'Today'}</span>
+                                                <span className="font-medium">Today</span>
                                             </div>
                                         </div>
                                     </CardContent>
