@@ -13,17 +13,17 @@ class StatsController {
         prisma.submission.count({
           where: {
             createdAt: {
-              gte: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000) 
             }
           }
         }),
-        leetcodeService.fetchProblems() // Get problems from LeetCode service
+        leetcodeService.fetchProblems() 
       ]);
 
-      // Return accurate stats using LeetCode service for problem count
+  
       const stats = {
-        totalUsers: Math.max(1, totalUsers), // At least 1 (current user)
-        totalProblems: problems.length, // Use actual problems from LeetCode service
+        totalUsers: Math.max(1, totalUsers), 
+        totalProblems: problems.length, 
         totalSubmissions,
         recentSubmissions,
         timestamp: new Date().toISOString()

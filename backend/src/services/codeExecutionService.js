@@ -5,7 +5,6 @@ const crypto = require('crypto');
 const testCaseService = require('./testCaseService');
 
 class CodeExecutionService {
-  // Execute code with test cases for a specific problem
   async executeWithTestCases(code, language, problemId) {
     const testConfig = testCaseService.getTestCases(problemId);
 
@@ -45,7 +44,7 @@ class CodeExecutionService {
     }
   }
 
-  // Run a single test case
+ 
   async _runSingleTest(code, language, testCase, functionName) {
     return new Promise((resolve) => {
       if (language === 'javascript') {

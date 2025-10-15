@@ -18,13 +18,13 @@ class LeetCodeService {
     try {
       console.log('Fetching problems from LeetCode API...');
 
-      // Try to fetch from LeetCode API
+      //fetch from LeetCode API
       const response = await this.makeRequest('https://leetcode.com/api/problems/all/');
 
       if (response && response.stat_status_pairs) {
         const problems = response.stat_status_pairs
           .filter(item => item.stat && !item.paid_only)
-          .slice(0, 22) // Limit to 22 problems for CJLF Resource Center
+          .slice(0, 50) 
           .map(item => ({
             id: `lc-${item.stat.question_id}`,
             title: item.stat.question__title,

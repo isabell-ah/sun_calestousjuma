@@ -32,7 +32,7 @@ passport.use(new GoogleStrategy({
   callbackURL: "/api/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
   try {
-    // Check if user already exists
+    // exists?
     let user = await prisma.user.findUnique({
       where: { googleId: profile.id }
     });

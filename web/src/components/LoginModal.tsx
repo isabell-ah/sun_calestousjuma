@@ -40,7 +40,7 @@ export const LoginModal = ({ open, onOpenChange }: LoginModalProps) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name, email }),
-                credentials: 'include' // Important for session cookies
+                credentials: 'include' 
             });
 
             if (!response.ok) {
@@ -53,7 +53,7 @@ export const LoginModal = ({ open, onOpenChange }: LoginModalProps) => {
             onOpenChange(false);
         } catch (error) {
             console.error('Quick login failed:', error);
-            // Show user-friendly error message
+            
             alert(`Login failed: ${error.message}`);
         } finally {
             setIsLoading(false);

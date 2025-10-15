@@ -37,6 +37,7 @@ import ModuleContent from "./pages/ModuleContent";
 import Home from "./pages/Home";
 import Playground from "./pages/Playground";
 import Profile from "./pages/Profile";
+import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,7 @@ const AppContent = () => {
             {/* Protected routes */}
             <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <LoginPage />} />
             <Route path="/profile" element={isAuthenticated ? <Profile /> : <LoginPage />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

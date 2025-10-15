@@ -19,7 +19,7 @@ class UserController {
         take: 10
       });
       
-      // Remove duplicates by email for CJLF Resource Center
+     
       const uniqueUsers = users.filter((user, index, self) => 
         index === self.findIndex(u => u.email === user.email)
       );
@@ -36,8 +36,7 @@ class UserController {
       res.status(500).json({ error: 'Failed to fetch leaderboard' });
     }
   }
-
-  // Get user profile by ID
+  // user profile ID
   async getUserProfile(req, res) {
     try {
       const user = await prisma.user.findUnique({

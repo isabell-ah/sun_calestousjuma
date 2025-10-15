@@ -1,15 +1,15 @@
 const leetcodeService = require('../services/leetcodeService');
 
 class ProblemController {
-  // Get all problems with filtering and pagination
+  // All problems with filtering and pagination
   async getAllProblems(req, res) {
     try {
       const { search, difficulty, category, page = 1, limit = 50 } = req.query;
 
-      // Get problems from LeetCode service (fallback problems)
+    
       let allProblems = await leetcodeService.fetchProblems();
 
-      // Apply filters
+      
       if (search) {
         const searchLower = search.toLowerCase();
         allProblems = allProblems.filter(problem =>
@@ -30,7 +30,7 @@ class ProblemController {
         );
       }
 
-      // Apply pagination
+     
       const skip = (parseInt(page) - 1) * parseInt(limit);
       const total = allProblems.length;
       const paginatedProblems = allProblems.slice(skip, skip + parseInt(limit));
@@ -46,8 +46,7 @@ class ProblemController {
       });
     } catch (error) {
       console.error('Get problems error:', error);
-      
-      // Return empty result instead of 500 error
+ 
       res.json({
         problems: [],
         pagination: {
@@ -59,16 +58,15 @@ class ProblemController {
       });
     }
   }
-
-  // Get random problem
+  // random problem
   async getRandomProblem(req, res) {
     try {
       const { difficulty } = req.query;
 
-      // Get problems from LeetCode service
+    
       let allProblems = await leetcodeService.fetchProblems();
 
-      // Filter by difficulty if specified
+      
       if (difficulty) {
         allProblems = allProblems.filter(problem =>
           problem.difficulty.toLowerCase() === difficulty.toLowerCase()
@@ -79,7 +77,7 @@ class ProblemController {
         return res.status(404).json({ error: 'No problems found' });
       }
 
-      // Get random problem
+  
       const randomIndex = Math.floor(Math.random() * allProblems.length);
       const problem = allProblems[randomIndex];
 
@@ -90,10 +88,10 @@ class ProblemController {
     }
   }
 
-  // Get single problem by ID
+  //single problem by ID
   async getProblemById(req, res) {
     try {
-      // Get problems from LeetCode service
+    
       const allProblems = await leetcodeService.fetchProblems();
       const problem = allProblems.find(p => p.id === req.params.id);
 

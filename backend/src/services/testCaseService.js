@@ -1,6 +1,5 @@
-// Test cases configuration matching database problems
+
 const TEST_CASES = {
-  // Database problems (from seed.js)
   'Hello World': {
     testCases: [
       { input: [], expected: 'Hello, World!' }
@@ -47,7 +46,7 @@ const TEST_CASES = {
     ],
     functionName: 'isValid'
   },
-  // LeetCode fallback problems
+
   'lc-1': {
     testCases: [
       { input: [[2,7,11,15], 9], expected: [0,1] }
@@ -64,22 +63,22 @@ const TEST_CASES = {
 };
 
 class TestCaseService {
-  // Get test cases for a specific problem
+ 
   getTestCases(problemId) {
     return TEST_CASES[problemId] || null;
   }
 
-  // Add new test cases for a problem
+
   addTestCases(problemId, testConfig) {
     TEST_CASES[problemId] = testConfig;
   }
 
-  // Get all available problem IDs with test cases
+
   getAvailableProblems() {
     return Object.keys(TEST_CASES);
   }
 
-  // Validate test case structure
+  
   validateTestCase(testCase) {
     return testCase && 
            Array.isArray(testCase.input) && 

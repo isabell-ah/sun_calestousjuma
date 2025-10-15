@@ -122,7 +122,6 @@ class TrackController {
 
 
 
-  // Private method to update user progress
   async _updateUserProgress(tracks, userId) {
     try {
       const userProgress = await prisma.submission.findMany({
@@ -132,7 +131,7 @@ class TrackController {
 
       const solvedCount = userProgress.length;
       
-      // Update progress based on solved problems
+      // progress update based on solved problems
       tracks.forEach(track => {
         if (track.id === 'beginner' && solvedCount >= 1) {
           track.progress = Math.min(100, (solvedCount / 6) * 100);
@@ -148,7 +147,7 @@ class TrackController {
       });
     } catch (error) {
       console.error('Error updating user progress:', error);
-      // Continue without progress updates
+      
     }
   }
 }

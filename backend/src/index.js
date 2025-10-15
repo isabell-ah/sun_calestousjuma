@@ -5,7 +5,7 @@ const passport = require('passport');
 const dotenv = require('dotenv');
 const { PrismaClient } = require('@prisma/client');
 
-// Import routes
+
 const authRoutes = require('./routes/auth');
 const problemRoutes = require('./routes/problems');
 const submissionRoutes = require('./routes/submissions');
@@ -76,13 +76,12 @@ app.get('/', (req, res) => {
   res.json({ message: 'Bestie API Server', version: '1.0.0' });
 });
 
-// Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Start server
+
 const server = app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
@@ -93,15 +92,15 @@ server.on('error', (error) => {
 
 
 
-// Error handling for unhandled promises and exceptions
+
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  // Don't exit the process, just log the error
+  
 });
 
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
-  // Don't exit the process, just log the error
+
 });
 
 // Graceful shutdown

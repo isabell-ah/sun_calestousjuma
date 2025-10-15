@@ -59,6 +59,14 @@ export const Header = () => {
                             <Play className="h-4 w-4 mr-1" />
                             Playground
                         </Button>
+                        <Button
+                            variant={location.pathname === "/leaderboard" ? "default" : "ghost"}
+                            size="sm"
+                            onClick={() => navigate("/leaderboard")}
+                        >
+                            <Trophy className="h-4 w-4 mr-1" />
+                            Leaderboard
+                        </Button>
                     </nav>
 
                     {/* Mobile Menu Button */}
@@ -102,7 +110,7 @@ export const Header = () => {
                 </div>
             </div>
             
-            {/* Mobile Menu with Glassmorphism */}
+           
             {showMobileMenu && (
                 <div className="md:hidden absolute top-16 left-0 right-0 z-50">
                     <div className="mx-4 mt-2 rounded-xl bg-card border border-border shadow-xl">
@@ -158,6 +166,19 @@ export const Header = () => {
                             >
                                 <Play className="h-4 w-4 mr-3" />
                                 Playground
+                            </Button>
+                            <Button
+                                variant={location.pathname === "/leaderboard" ? "default" : "ghost"}
+                                size="sm"
+                                className={`w-full justify-start h-10 px-3 rounded-lg transition-all text-sm ${
+                                    location.pathname === "/leaderboard" 
+                                        ? "bg-primary text-primary-foreground shadow-sm" 
+                                        : "hover:bg-muted text-foreground"
+                                }`}
+                                onClick={() => { navigate("/leaderboard"); setShowMobileMenu(false); }}
+                            >
+                                <Trophy className="h-4 w-4 mr-3" />
+                                Leaderboard
                             </Button>
                         </div>
                     </div>

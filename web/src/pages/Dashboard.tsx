@@ -36,49 +36,7 @@ const Dashboard = () => {
         ? problems 
         : problems.filter(p => p.difficulty === selectedDifficulty);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         console.log('🔄 Starting data fetch...');
-            
-    //         try {
-    //             // Test basic connectivity first
-    //             const healthResponse = await fetch('http://localhost:3001/api/health');
-    //             if (!healthResponse.ok) {
-    //                 throw new Error('Backend server not responding');
-    //             }
-    //             console.log('✅ Backend server is running');
-                
-    //             // Fetch stats
-    //             console.log('📊 Fetching stats...');
-    //             const statsData = await api.getStats();
-    //             console.log('Stats received:', statsData);
-    //             setStats(statsData);
-                
-    //             // Fetch problems
-    //             console.log('📝 Fetching problems...');
-    //             const problemsResponse = await fetch('http://localhost:3001/api/problems');
-    //             const problemsData = await problemsResponse.json();
-    //             console.log('Problems received:', problemsData);
-                
-    //             if (problemsData.problems) {
-    //                 setProblems(problemsData.problems);
-    //                 console.log(`✅ Loaded ${problemsData.problems.length} problems`);
-    //             } else {
-    //                 console.warn('No problems array in response');
-    //                 setProblems([]);
-    //             }
-                
-    //         } catch (error) {
-    //             console.error('❌ Data fetch failed:', error);
-    //             setStats({ totalProblems: 0, totalUsers: 0, totalSubmissions: 0 });
-    //             setProblems([]);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-        
-    //     fetchData();
-    // }, []);
+  
 
     const handleProblemClick = (problem: any) => {
         localStorage.setItem("selectedProblem", JSON.stringify(problem));

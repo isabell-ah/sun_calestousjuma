@@ -18,7 +18,7 @@ class SubmissionController {
     const userId = req.user.id;
 
     try {
-      // Create submission record
+      // submission record
       const submission = await prisma.submission.create({
         data: {
           userId,
@@ -32,8 +32,6 @@ class SubmissionController {
       // Execute code with test cases
       const testResult = await codeExecutionService.executeWithTestCases(code, language, problemId);
       const status = testResult.passed ? 'accepted' : 'wrong_answer';
-
-      // Update submission with results
       const updatedSubmission = await prisma.submission.update({
         where: { id: submission.id },
         data: { 
@@ -78,21 +76,20 @@ class SubmissionController {
     }
   }
 
-  // Private helper method to update user stats
+ 
   async _updateUserStats(userId, problemId) {
     const currentUser = await prisma.user.findUnique({ where: { id: userId } });
-    
-    // Check if user already solved this problem
+   
     const existingSolution = await prisma.submission.findFirst({
       where: { userId, problemId, status: 'accepted' }
     });
     
-    // Only give XP for first-time solutions
+    
     const xpGain = existingSolution ? 0 : 50;
     const newXP = currentUser.xp + xpGain;
     const newLevel = Math.floor(newXP / 100) + 1;
     
-    // Update streak only if solved today
+    
     const today = new Date().toDateString();
     const lastActive = currentUser.lastActive ? new Date(currentUser.lastActive).toDateString() : null;
     const streakIncrement = lastActive === today ? 0 : 1;

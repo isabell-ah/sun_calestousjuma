@@ -50,9 +50,9 @@ class AuthController {
     }
   }
 
-  // Handle Google OAuth callback
+  //Google OAuth callback
   handleGoogleCallback(req, res) {
-    // Redirect to dashboard after successful Google auth
+    // Redirect
     res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:1313'}/dashboard?auth=success`);
   }
 

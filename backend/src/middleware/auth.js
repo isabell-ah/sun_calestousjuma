@@ -1,4 +1,4 @@
-// Authentication middleware
+
 const requireAuth = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ 
@@ -9,9 +9,9 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-// Optional authentication middleware
+
 const optionalAuth = (req, res, next) => {
-  // Continue regardless of authentication status
+
   next();
 };
 

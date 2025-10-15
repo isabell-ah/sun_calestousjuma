@@ -53,8 +53,7 @@ const CodePlatform = () => {
             <div className="flex-1 p-4">
                 {isMobile ? (
                     <div className="h-full flex flex-col">
-                        {/* Mobile Tab Navigation */}
-                        <div className="flex mb-4 bg-muted rounded-lg p-1">
+                               <div className="flex mb-4 bg-muted rounded-lg p-1">
                             <Button
                                 variant={activeTab === "code" ? "default" : "ghost"}
                                 size="sm"

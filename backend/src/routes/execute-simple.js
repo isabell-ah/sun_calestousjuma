@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
       const tempFile = path.join(__dirname, `temp_${crypto.randomBytes(8).toString('hex')}.js`);
       
       try {
-        fs.writeFileSync(tempFile, code, { mode: 0o600 }); // Restrict file permissions
+        fs.writeFileSync(tempFile, code, { mode: 0o600 }); 
         
         exec(`node "${tempFile}"`, { 
           timeout: EXECUTION_TIMEOUT,
